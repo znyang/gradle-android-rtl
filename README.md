@@ -1,6 +1,6 @@
 # gradle-android-rtl
 
-[![Build Status](https://travis-ci.org/znyang/gradle-android-rtl.svg?branch=master)](https://travis-ci.org/znyang/gradle-android-rtl)
+[![](https://jitpack.io/v/znyang/gradle-android-rtl.svg)](https://jitpack.io/#znyang/gradle-android-rtl)
 
 ## 概述
 
