@@ -41,6 +41,10 @@ rtl {
 
 ## 输出
 
+```
+gradle androidRtl
+```
+
 需要修复的layout文件会生成在rtl.into的目录下，可以在确认后覆盖到你的layout目录下，再进行一遍检查！
 
 支持的标签如下：
