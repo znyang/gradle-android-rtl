@@ -1,0 +1,2 @@
+// Sets the output JAR filename
+rootProject.name = 'gradle-android-rtl'
