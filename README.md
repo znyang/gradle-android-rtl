@@ -27,7 +27,7 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath 'com.github.znyang:gradle-android-rtl:0.0.1'
+        classpath 'com.github.znyang:gradle-android-rtl:0.0.2'
     }
 }
 
