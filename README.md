@@ -57,6 +57,9 @@ gradle androidRtl
     "layout_marginLeft", "layout_marginStart",
     "layout_marginRight", "layout_marginEnd",
 
+    "paddingLeft", "paddingStart",
+    "paddingRight", "paddingEnd",
+
     "layout_alignParentLeft", "layout_alignParentStart",
     "layout_alignParentRight", "layout_alignParentEnd",
 
