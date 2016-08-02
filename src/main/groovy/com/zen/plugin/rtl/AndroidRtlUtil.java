@@ -1,5 +1,9 @@
 package com.zen.plugin.rtl;
 
+import com.zen.plugin.rtl.handler.AttrHandler;
+import com.zen.plugin.rtl.handler.DefaultAttrHandler;
+import com.zen.plugin.rtl.handler.PaddingHandler;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -13,9 +17,6 @@ import java.util.regex.Pattern;
  */
 public class AndroidRtlUtil {
 
-    private static final String REGEX_FORMAT = "<[^>]*?([\\s]+)(android:%s=\"([^\"]+)\")[^>]+>";
-    private static final String FIXED_FORMATTER = "android:%s=\"%s\"\n";
-
     private static final String[] RTL_ATTRS = {
             "layout_toLeftOf", "layout_toStartOf",
             "layout_toRightOf", "layout_toEndOf",
@@ -23,8 +24,8 @@ public class AndroidRtlUtil {
             "layout_marginLeft", "layout_marginStart",
             "layout_marginRight", "layout_marginEnd",
 
-            "paddingLeft", "paddingStart",
-            "paddingRight", "paddingEnd",
+            "layout_alignLeft", "layout_alignStart",
+            "layout_alignRight", "layout_alignEnd",
 
             "layout_alignParentLeft", "layout_alignParentStart",
             "layout_alignParentRight", "layout_alignParentEnd",
@@ -33,20 +34,13 @@ public class AndroidRtlUtil {
             "drawableRight", "drawableEnd",
     };
 
-    private static final List<String> BASE_ATTRS_REGEX = new ArrayList<>();
-    private static final List<String> FIXED_ATTRS_REGEX = new ArrayList<>();
-    private static final List<String> FIXED_ATTRS = new ArrayList<>();
+    private static List<AttrHandler> ATTR_HANDLERS = new ArrayList<>();
 
     static {
-        for (int i = 0, size = RTL_ATTRS.length; i < size; i++) {
-            String regex = String.format(REGEX_FORMAT, RTL_ATTRS[i]);
-            if ((i & 1) == 0) {
-                BASE_ATTRS_REGEX.add(regex);
-            } else {
-                FIXED_ATTRS_REGEX.add(regex);
-                FIXED_ATTRS.add(RTL_ATTRS[i]);
-            }
+        for (int i = 0, size = RTL_ATTRS.length; i < size; i += 2) {
+            ATTR_HANDLERS.add(new DefaultAttrHandler(RTL_ATTRS[i], RTL_ATTRS[i + 1]));
         }
+        ATTR_HANDLERS.add(new PaddingHandler());
     }
 
     /**
@@ -56,34 +50,25 @@ public class AndroidRtlUtil {
      * @return 非空表示进行修复后的布局文本，null表示无需修改
      */
     public static String modifyRtl(String text) {
-        boolean fixed = false;
-        for (int i = BASE_ATTRS_REGEX.size(); --i >= 0; ) {
-            String attr = FIXED_ATTRS.get(i);
+        return modifyRtl(text, ATTR_HANDLERS);
+    }
 
-            Pattern p = Pattern.compile(BASE_ATTRS_REGEX.get(i));
-            Matcher m = p.matcher(text);
+    private static String modifyRtl(String text, List<AttrHandler> handlers) {
+        if (handlers == null || handlers.isEmpty()) {
+            return text;
+        }
+        boolean hasFixed = false;
+        for (AttrHandler handler : handlers) {
+            Matcher m = Pattern.compile(handler.getRegex()).matcher(text);
             while (m.find()) {
-                String content = m.group(0);
-
-                // 判断是否有做RTL支持
-                if (!Pattern.compile(FIXED_ATTRS_REGEX.get(i)).matcher(content).find()) {
-                    String space = m.group(1);      // 空白处
-                    String property = m.group(2);   // 完整属性键值
-                    String value = m.group(3);      // 双引号中的值
-                    space = space.replace("\r\n", "").replace("\n", "");
-
-                    int index = content.indexOf(property);
-                    String fixedAttr = String.format(FIXED_FORMATTER, attr, value);
-
-                    // 添加rtl支持的属性到控件中
-                    String result = content.substring(0, index) + fixedAttr + space + content.substring(index);
-                    text = text.replace(content, result);
-
-                    fixed = true;
+                String modify = handler.modifyAttr(text, m);
+                if (modify != null) {
+                    text = modify;
+                    hasFixed = true;
                 }
             }
         }
-        return fixed ? text : null;
+        return hasFixed ? text : null;
     }
 
 }
