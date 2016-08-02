@@ -27,7 +27,7 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath 'com.github.znyang:gradle-android-rtl:0.0.2'
+        classpath 'com.github.znyang:gradle-android-rtl:0.0.3'
     }
 }
 
@@ -57,13 +57,19 @@ gradle androidRtl
     "layout_marginLeft", "layout_marginStart",
     "layout_marginRight", "layout_marginEnd",
 
-    "paddingLeft", "paddingStart",
-    "paddingRight", "paddingEnd",
+    "layout_alignLeft", "layout_alignStart",
+    "layout_alignRight", "layout_alignEnd",
 
     "layout_alignParentLeft", "layout_alignParentStart",
     "layout_alignParentRight", "layout_alignParentEnd",
 
     "drawableLeft", "drawableStart",
     "drawableRight", "drawableEnd",
+}
+
+// padding只要存在left/right，就会补充四个标签
+{
+    "paddingLeft", "paddingStart",
+    "paddingRight", "paddingEnd"
 }
 ```
