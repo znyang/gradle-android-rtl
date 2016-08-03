@@ -3,6 +3,7 @@ package com.zen.plugin.rtl;
 import com.zen.plugin.rtl.handler.AttrHandler;
 import com.zen.plugin.rtl.handler.DefaultAttrHandler;
 import com.zen.plugin.rtl.handler.PaddingHandler;
+import com.zen.plugin.rtl.handler.ValueHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,12 @@ public class AndroidRtlUtil {
             "drawableRight", "drawableEnd",
     };
 
+    // 将这些标签中value的left->start, right->end
+    private static final String[] RTL_VALUE_ATTRS = {
+            "layout_gravity",
+            "gravity"
+    };
+
     private static List<AttrHandler> ATTR_HANDLERS = new ArrayList<>();
 
     static {
@@ -41,6 +48,9 @@ public class AndroidRtlUtil {
             ATTR_HANDLERS.add(new DefaultAttrHandler(RTL_ATTRS[i], RTL_ATTRS[i + 1]));
         }
         ATTR_HANDLERS.add(new PaddingHandler());
+        for (String value : RTL_VALUE_ATTRS) {
+            ATTR_HANDLERS.add(new ValueHandler(value));
+        }
     }
 
     /**
