@@ -10,6 +10,15 @@
 
 [Native RTL support in Android 4.2](http://android-developers.blogspot.tw/2013/03/native-rtl-support-in-android-42.html)
 
+## Android Studio插件
+
+在AndroidStudio中通过`Refactor->Add RTL Support Where Possible...` 可以调出自动修复工具，这个工具也挺方便的。
+
+与该工具的差别：
+
+* 性能更好。在处理大批量文件修改时，用AS工具会出现卡顿
+* 支持padding标签的补齐
+
 ## 检查修改点
 
 `Android>Lint>Internationalization>Bidirectional Text`
