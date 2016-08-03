@@ -19,7 +19,7 @@
 * 性能更好。在处理大批量文件修改时，用AS工具会出现卡顿
 * 支持padding标签的补齐
 
-## 检查修改点
+## 如何验证修复完善？
 
 `Android>Lint>Internationalization>Bidirectional Text`
 
