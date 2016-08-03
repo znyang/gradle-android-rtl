@@ -27,7 +27,7 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath 'com.github.znyang:gradle-android-rtl:0.0.3'
+        classpath 'com.github.znyang:gradle-android-rtl:0.0.4'
     }
 }
 
@@ -46,6 +46,8 @@ gradle androidRtl
 ```
 
 需要修复的layout文件会生成在rtl.into的目录下，可以在确认后覆盖到你的layout目录下，再进行一遍检查！
+
+**注：未定义rtl.into的情况下，修复的文件会直接覆盖原文件！**
 
 支持的标签如下：
 
@@ -71,5 +73,11 @@ gradle androidRtl
 {
     "paddingLeft", "paddingStart",
     "paddingRight", "paddingEnd"
+}
+
+// 支持对以下标签的value替换(left->start, right->end)
+{
+    "layout_gravity",
+    "gravity"
 }
 ```
