@@ -19,14 +19,6 @@
 * 性能更好。在处理大批量文件修改时，用AS工具会出现卡顿
 * 支持padding标签的补齐
 
-## 如何验证修复完善？
-
-`Android>Lint>Internationalization>Bidirectional Text`
-
-![](./img/1.jpg)
-
-![](./img/2.jpg)
-
 ## 配置
 
 ```gradle
@@ -90,3 +82,11 @@ gradle androidRtl
     "gravity"
 }
 ```
+
+## 如何验证修复完善？
+
+`Android>Lint>Internationalization>Bidirectional Text`
+
+![](./img/1.jpg)
+
+![](./img/2.jpg)
