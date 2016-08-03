@@ -21,16 +21,23 @@ class AndroidRtlSupportTask extends DefaultTask {
             System.err.println("rtl.from has not found!! ")
             return;
         }
-        if (mIntoPath == null || mIntoPath.empty) {
-            System.err.println("rtl.into has not found!! ")
-            return
-        }
 
+        autoSetInto()
         removeDir()
         createRtlLayout()
     }
 
+    private void autoSetInto() {
+        if (mIntoPath != null && !mIntoPath.isEmpty()) {
+            return;
+        }
+        mIntoPath = null;
+    }
+
     private void removeDir() {
+        if (mIntoPath == null) {
+            return;
+        }
         File target = new File(mIntoPath)
         if (target.exists()) {
             boolean success = target.delete()
@@ -39,17 +46,29 @@ class AndroidRtlSupportTask extends DefaultTask {
         target.mkdirs()
     }
 
-    private createRtlLayout() {
+    private void createRtlLayout() {
+        long start = System.currentTimeMillis()
         mFileTree.forEach({
             file ->
                 String content = file.text
                 String fixed = AndroidRtlUtil.modifyRtl(content)
                 if (fixed != null) {
-                    File output = new File(mIntoPath, file.getName())
-                    output.text = fixed
-                    System.out.println("create " + output.path)
+                    createModifyFile(file, fixed, mIntoPath)
                 }
         })
+        long cost = System.currentTimeMillis() - start
+        System.out.println("cost time: " + cost + "ms")
+    }
+
+    static void createModifyFile(File file, String fixed, String into) {
+        File output;
+        if (into == null) {
+            output = new File(file.getPath())
+        } else {
+            output = new File(into, file.getName())
+        }
+        output.text = fixed
+        System.out.println("create " + output.path)
     }
 
     public void from(FileTree path) {
